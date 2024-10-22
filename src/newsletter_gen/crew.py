@@ -1,6 +1,6 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from newsletter_gen.tools.research import SearchAndContents, FindSimilar, GetContents
+from tools.research import SearchAndContents, FindSimilar, GetContents
 from langchain_anthropic import ChatAnthropic
 from langchain_groq import ChatGroq
 from datetime import datetime
@@ -97,26 +97,44 @@ class NewsletterGenCrew:
 
     @task
     def research_task(self) -> Task:
+        # Ensure the logs directory exists
+        if not os.path.exists('logs'):
+            os.makedirs('logs')
+        
+        # Define the output file
+        output_file = f"logs/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}_research_task.md"
         return Task(
             config=self.tasks_config["research_task"],
             agent=self.researcher(),
-            output_file=f"logs/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}_research_task.md",
+            output_file=output_file,
         )
 
     @task
     def edit_task(self) -> Task:
+        # Ensure the logs directory exists
+        if not os.path.exists('logs'):
+            os.makedirs('logs')
+        
+        # Define the output file
+        output_file = f"logs/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}_edit_task.md"
         return Task(
             config=self.tasks_config["edit_task"],
             agent=self.editor(),
-            output_file=f"logs/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}_edit_task.md",
+            output_file=output_file,
         )
 
     @task
     def newsletter_task(self) -> Task:
+        # Ensure the logs directory exists
+        if not os.path.exists('logs'):
+            os.makedirs('logs')
+        
+        # Define the output file
+        output_file = f"logs/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}_newsletter_task.html"
         return Task(
             config=self.tasks_config["newsletter_task"],
             agent=self.designer(),
-            output_file=f"logs/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}_newsletter_task.html",
+            output_file=output_file,
         )
 
     @crew
